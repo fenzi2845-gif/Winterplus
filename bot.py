@@ -132,3 +132,15 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
+    import os
+from aiohttp import web
+
+async def handle(request):
+    return web.Response(text="Winterplus Bot is running!")
+
+app = web.Application()
+app.add_routes([web.get('/', handle)])
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))
+    web.run_app(app, port=port)
