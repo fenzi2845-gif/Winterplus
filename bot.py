@@ -129,18 +129,28 @@ async def main():
     print(f"Веб-сервер запущен! Откройте в браузере: http://127.0.0.1:{PORT}")
 
     await bot.start(TOKEN)
+import threading
+
+def run_web():
+    app = web.Application()
+    app.router.add_get('/', index_handler)
+    app.router.add_post('/api/submit', handle_submit)
+    app.router.add_post('/api/check-status', check_status)
+    
+    runner = web.AppRunner(app)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(runner.setup())
+    site = web.TCPSite(runner, '0.0.0.0', PORT)
+    loop.run_until_complete(site.start())
+    print(f"Веб-сервер запущен на порту {PORT}")
+    loop.run_forever()
 
 if __name__ == '__main__':
-    asyncio.run(main())
-    import os
-from aiohttp import web
+    # Запускаем веб-сервер в фоновом потоке для Render
+    web_thread = threading.Thread(target=run_web)
+    web_thread.daemon = True
+    web_thread.start()
 
-async def handle(request):
-    return web.Response(text="Winterplus Bot is running!")
-
-app = web.Application()
-app.add_routes([web.get('/', handle)])
-
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))
-    web.run_app(app, port=port)
+    # Запускаем Discord-бота в основном потоке
+    bot.run(TOKEN)
