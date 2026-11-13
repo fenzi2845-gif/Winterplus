@@ -114,8 +114,7 @@
     </div>
 
     <script>
-        // ВСТАВЬТЕ СЮДА ССЫЛКУ НА ВАШУ СЛУЖБУ БОТА НА RENDER (без слеша на конце)
-        const BOT_API_URL = "https://ВАШ-БОТ.onrender.com";
+        const BOT_API_URL = "https://winterplus.onrender.com";
 
         async function submitForm(event) {
             event.preventDefault();
@@ -148,7 +147,7 @@
                     btn.innerText = "📤 Отправить заявку";
                 }
             } catch (err) {
-                alert("Не удалось связаться с ботом. Проверьте, запущен ли он на Render и верна ли ссылка BOT_API_URL.");
+                alert("Не удалось связаться с ботом. Подождите 30 секунд (возможно сервер просыпается) и попробуйте снова.");
                 btn.disabled = false;
                 btn.innerText = "📤 Отправить заявку";
             }
@@ -172,7 +171,7 @@
                 } catch (e) {
                     console.log("Ожидание ответа сервера...");
                 }
-            }, 3000); // Проверяет каждые 3 секунды
+            }, 3000);
         }
 
         function showServerInfo() {
