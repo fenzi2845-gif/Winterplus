@@ -22,30 +22,54 @@
             padding: 20px;
         }
         .container {
-            max-width: 600px;
+            max-width: 550px;
             width: 100%;
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
-            padding: 40px;
-            text-align: center;
+            padding: 30px 40px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
         }
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
             color: #38bdf8;
         }
         p {
             color: #94a3b8;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
+            margin-bottom: 25px;
+            font-size: 1rem;
         }
-        .menu-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        /* Стили формы */
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus {
+            border-color: #38bdf8;
+        }
+        textarea {
+            resize: vertical;
+            height: 90px;
         }
         .btn {
             display: flex;
@@ -55,70 +79,113 @@
             background: #2563eb;
             color: white;
             text-decoration: none;
-            padding: 15px 20px;
+            padding: 14px 20px;
             border-radius: 10px;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             transition: all 0.2s ease;
             border: none;
             cursor: pointer;
             width: 100%;
+            margin-top: 15px;
         }
         .btn:hover {
             background: #1d4ed8;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+            transform: translateY(-1px);
         }
-        .btn-discord {
-            background: #5865F2;
-        }
-        .btn-discord:hover {
-            background: #4752C4;
-            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
-        }
-        .btn-shop {
-            background: #10b981;
-        }
-        .btn-shop:hover {
-            background: #059669;
-            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
-        }
-        /* Всплывающее уведомление о копировании IP */
-        #copy-alert {
-            margin-top: 15px;
-            color: #34d399;
-            font-size: 0.95rem;
+        .btn-discord { background: #5865F2; }
+        .btn-discord:hover { background: #4752C4; }
+        .btn-shop { background: #10b981; }
+        .btn-shop:hover { background: #059669; }
+
+        /* Блоки переключения (анкета / меню) */
+        #success-menu {
             display: none;
+        }
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        #copy-alert {
+            margin-top: 12px;
+            color: #34d399;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .success-title {
+            color: #34d399;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Winterplus</h1>
-        <p>Добро пожаловать на лучший ванильный Minecraft сервер!</p>
-
-        <div class="menu-buttons">
-            <!-- Кнопка 1: Дискорд -->
-            <a href="https://discord.gg/ваш_инвайт" target="_blank" class="btn btn-discord">
-                💬 Наш Дискорд
-            </a>
-
-            <!-- Кнопка 2: IP и Версия (скрипт копирует IP в буфер обмена) -->
-            <button class="btn" onclick="copyServerIP()">
-                📌 IP и Версия сервера
-            </button>
-
-            <!-- Кнопка 3: Переход на сайт/магазин EasyDonate -->
-            <a href="https://winterplus.easydonate.ru" target="_blank" class="btn btn-shop">
-                🌐 Магазин / Донат
-            </a>
+        <!-- ЭТАП 1: Анкета на сайте -->
+        <div id="application-section">
+            <h1>Winterplus</h1>
+            <p>Заполните заявку, чтобы получить доступ к серверу</p>
+            
+            <form id="whitelist-form" onsubmit="submitForm(event)">
+                <div class="form-group">
+                    <label>Ваш ник в Minecraft</label>
+                    <input type="text" id="minecraft-nick" placeholder="Например: Steve" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Ваш возраст</label>
+                    <input type="number" id="player-age" placeholder="Сколько вам лет?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Почему хотите играть у нас?</label>
+                    <textarea id="player-about" placeholder="Расскажите немного о себе..." required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">📤 Отправить заявку</button>
+            </form>
         </div>
 
-        <div id="copy-alert">✅ IP-адрес скопирован в буфер обмена: <b>winterplus.aternos.me</b> (Версия: 1.20.4)</div>
+        <!-- ЭТАП 2: Меню после отправки (или одобрения) -->
+        <div id="success-menu">
+            <div class="success-title">🎉 Анкета успешно отправлена!</div>
+            <p>Ваши данные переданы администрации. Выберите нужный раздел:</p>
+
+            <div class="menu-buttons">
+                <!-- Кнопка 1: Дискорд -->
+                <a href="https://discord.gg/ваш_инвайт" target="_blank" class="btn btn-discord">
+                    💬 Наш Дискорд
+                </a>
+
+                <!-- Кнопка 2: IP и Версия (копирует IP при клике) -->
+                <button class="btn" onclick="copyServerIP()">
+                    📌 IP и Версия сервера
+                </button>
+
+                <!-- Кнопка 3: Магазин -->
+                <a href="https://winterplus.easydonate.ru" target="_blank" class="btn btn-shop">
+                    🌐 Магазин / Донат
+                </a>
+            </div>
+
+            <div id="copy-alert">✅ IP-адрес скопирован: <b>winterplus.aternos.me</b> (Версия: 1.20.4)</div>
+        </div>
     </div>
 
     <script>
+        function submitForm(event) {
+            event.preventDefault(); // Останавливаем перезагрузку страницы
+            
+            // Здесь можно подключить отправку данных в вашего бота (например, через Webhook в Discord)
+            // Сейчас просто скрываем форму и показываем меню с кнопками
+            
+            document.getElementById("application-section").style.display = "none";
+            document.getElementById("success-menu").style.display = "block";
+        }
+
         function copyServerIP() {
             const ipText = "winterplus.aternos.me";
             navigator.clipboard.writeText(ipText).then(() => {
