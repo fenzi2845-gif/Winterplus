@@ -45,16 +45,17 @@
         .btn:disabled { background: #475569; cursor: not-allowed; transform: none; }
         .btn-discord { background: #5865F2; }
         .btn-discord:hover { background: #4752C4; }
-        .btn-shop { background: #10b981; }
-        .btn-shop:hover { background: #059669; }
+        .btn-desc { background: #0284c7; }
+        .btn-desc:hover { background: #0369a1; }
         #pending-section, #success-menu, #rejected-section { display: none; }
         .clock-icon { font-size: 3.5rem; margin-bottom: 12px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
         .menu-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
-        #info-box {
-            margin-top: 14px; padding: 12px; background: #1e293b; border-radius: 8px;
-            border: 1px solid #38bdf8; color: #e2e8f0; display: none; font-size: 0.95rem;
+        #info-box, #desc-box {
+            margin-top: 14px; padding: 14px; background: #1e293b; border-radius: 8px;
+            border: 1px solid #38bdf8; color: #e2e8f0; display: none; font-size: 0.95rem; text-align: left; line-height: 1.5;
         }
+        #desc-box { border-color: #0284c7; }
     </style>
 </head>
 <body>
@@ -98,11 +99,17 @@
             <div class="menu-buttons">
                 <a href="https://discord.gg/ваш_инвайт" target="_blank" class="btn btn-discord">💬 Наш Дискорд</a>
                 <button class="btn" onclick="showServerInfo()">📌 IP и Версия сервера</button>
-                <a href="https://winterplus.easydonate.ru" target="_blank" class="btn btn-shop">🌐 Наш сайт / Магазин</a>
+                <button class="btn btn-desc" onclick="toggleDescription()">📋 Описание сервера</button>
             </div>
+            
             <div id="info-box">
                 🌐 <b>IP:</b> <code>winterplus.aternos.me</code> (скопирован!)<br>
                 🎮 <b>Версия:</b> <code>26.3</code>
+            </div>
+
+            <div id="desc-box">
+                <b>О сервере Winterplus:</b><br>
+                Добро пожаловать на Winterplus! ❄️ Это уютный ванильный Minecraft-сервер (версия 26.3), где царит атмосфера классического выживания, дружное сообщество и полная свобода творчества. Никаких лишних приватов и модов — только чистая ванила и честный геймплей.
             </div>
         </div>
 
@@ -176,7 +183,19 @@
 
         function showServerInfo() {
             navigator.clipboard.writeText("winterplus.aternos.me");
-            document.getElementById("info-box").style.display = "block";
+            const infoBox = document.getElementById("info-box");
+            infoBox.style.display = "block";
+            document.getElementById("desc-box").style.display = "none"; // скрываем описание, если открыто
+        }
+
+        function toggleDescription() {
+            const descBox = document.getElementById("desc-box");
+            if (descBox.style.display === "block") {
+                descBox.style.display = "none";
+            } else {
+                descBox.style.display = "block";
+                document.getElementById("info-box").style.display = "none"; // скрываем IP, если открыто
+            }
         }
     </script>
 </body>
