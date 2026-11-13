@@ -3,238 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Winterplus — Вайтлист и Донат</title>
+    <title>Winterplus — Ванильный Minecraft сервер</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1e1f22;
-            color: #dbdee1;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
         .container {
-            width: 100%;
             max-width: 600px;
-            background: #2b2d31;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            box-sizing: border-box;
-            margin-bottom: 20px;
-        }
-        h1, h2 {
-            color: #ffffff;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px;
             text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
-        /* IP блока */
-        .ip-box {
-            background: #1e1f22;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 25px;
-            border: 1px solid #4e5058;
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #38bdf8;
         }
-        .ip-flex {
+        p {
+            color: #94a3b8;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        .menu-buttons {
             display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .btn {
+            display: flex;
+            align-items: center;
             justify-content: center;
             gap: 10px;
-            align-items: center;
-            margin-top: 8px;
-        }
-        code {
-            background: #2b2d31;
-            padding: 8px 15px;
-            border-radius: 5px;
-            color: #5865f2;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .copy-btn, button[type="submit"] {
-            background: #5865f2;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 15px;
-            transition: background 0.2s;
-        }
-        .copy-btn:hover, button[type="submit"]:hover {
-            background: #4752c4;
-        }
-        /* Форма */
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #949ba4;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #1e1f22;
-            background: #1e1f22;
-            color: white;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-        input:focus, textarea:focus {
-            border-color: #5865f2;
-            outline: none;
-        }
-        /* Донаты */
-        .donate-grid {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 15px;
-        }
-        .donate-card {
-            background: #1e1f22;
-            padding: 20px;
-            border-radius: 8px;
-            width: 230px;
-            text-align: center;
-            border: 1px solid #4e5058;
-            box-sizing: border-box;
-        }
-        .donate-btn {
-            display: inline-block;
-            background: #23a55a;
+            background: #2563eb;
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-top: 10px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
         }
-        .donate-btn:hover {
-            background: #1f8b4c;
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
         }
-        #result-msg {
-            text-align: center;
+        .btn-discord {
+            background: #5865F2;
+        }
+        .btn-discord:hover {
+            background: #4752C4;
+            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
+        }
+        .btn-shop {
+            background: #10b981;
+        }
+        .btn-shop:hover {
+            background: #059669;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        /* Всплывающее уведомление о копировании IP */
+        #copy-alert {
             margin-top: 15px;
-            font-weight: bold;
+            color: #34d399;
+            font-size: 0.95rem;
+            display: none;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>❄️ Winterplus Minecraft</h1>
-        
-        <!-- Блок IP сервера -->
-        <div class="ip-box">
-            <span style="color: #949ba4; font-size: 14px;">IP адрес нашего сервера:</span>
-            <div class="ip-flex">
-                <code id="server-ip">winterplus.aternos.me</code>
-                <button class="copy-btn" onclick="copyIP()">Копировать</button>
-            </div>
-            <p id="copy-msg" style="color: #23a55a; font-size: 13px; margin: 8px 0 0 0; display: none;">✅ IP скопирован в буфер обмена!</p>
+        <h1>Winterplus</h1>
+        <p>Добро пожаловать на лучший ванильный Minecraft сервер!</p>
+
+        <div class="menu-buttons">
+            <!-- Кнопка 1: Дискорд -->
+            <a href="https://discord.gg/ваш_инвайт" target="_blank" class="btn btn-discord">
+                💬 Наш Дискорд
+            </a>
+
+            <!-- Кнопка 2: IP и Версия (скрипт копирует IP в буфер обмена) -->
+            <button class="btn" onclick="copyServerIP()">
+                📌 IP и Версия сервера
+            </button>
+
+            <!-- Кнопка 3: Переход на сайт/магазин EasyDonate -->
+            <a href="https://winterplus.easydonate.ru" target="_blank" class="btn btn-shop">
+                🌐 Магазин / Донат
+            </a>
         </div>
 
-        <h2>Подать заявку на вайтлист</h2>
-        <form id="whitelistForm">
-            <div class="form-group">
-                <label>Ваш ник в Minecraft:</label>
-                <input type="text" id="mc_nick" required placeholder="например, Alex">
-            </div>
-            <div class="form-group">
-                <label>Ваш ник в Discord:</label>
-                <input type="text" id="discord_nick" required placeholder="например, alex#1234">
-            </div>
-            <div class="form-group">
-                <label>Ваш возраст:</label>
-                <input type="number" id="age" required placeholder="например, 14">
-            </div>
-            <div class="form-group">
-                <label>Что планируете делать на сервере?</label>
-                <textarea id="about" rows="3" required placeholder="Расскажите немного о себе..."></textarea>
-            </div>
-            <button type="submit" style="width: 100%;">Отправить заявку</button>
-        </form>
-        <div id="result-msg"></div>
-    </div>
-
-    <!-- Блок донатов -->
-    <div class="container">
-        <h2>💎 Поддержать проект</h2>
-        <div class="donate-grid">
-            <div class="donate-card">
-                <h3 style="color: #23a55a; margin-top: 0;">VIP</h3>
-                <p style="color: #949ba4; font-size: 13px;">• Префикс в чате<br>• Вход без очереди<br>• 2 точки дома</p>
-                <p style="font-size: 18px; font-weight: bold; color: white; margin: 10px 0;">149 ₽</p>
-                <a href="https://winterplus.easydonate.ru" target="_blank" class="donate-btn">Купить</a>
-            </div>
-            <div class="donate-card" style="border-color: #f0b232;">
-                <h3 style="color: #f0b232; margin-top: 0;">PREMIUM</h3>
-                <p style="color: #949ba4; font-size: 13px;">• Все права VIP<br>• Полёт в лобби<br>• 5 точек дома</p>
-                <p style="font-size: 18px; font-weight: bold; color: white; margin: 10px 0;">349 ₽</p>
-                <a href="" target="_blank" class="donate-btn" style="background: #f0b232; color: #1e1f22;">Купить</a>
-            </div>
-        </div>
+        <div id="copy-alert">✅ IP-адрес скопирован в буфер обмена: <b>winterplus.aternos.me</b> (Версия: 1.20.4)</div>
     </div>
 
     <script>
-        function copyIP() {
-            const ipText = document.getElementById("server-ip").innerText;
-            navigator.clipboard.writeText(ipText);
-            const msg = document.getElementById("copy-msg");
-            msg.style.display = "block";
-            setTimeout(() => { msg.style.display = "none"; }, 2500);
+        function copyServerIP() {
+            const ipText = "winterplus.aternos.me";
+            navigator.clipboard.writeText(ipText).then(() => {
+                const alertBox = document.getElementById("copy-alert");
+                alertBox.style.display = "block";
+                setTimeout(() => {
+                    alertBox.style.display = "none";
+                }, 4000);
+            });
         }
-
-        document.getElementById('whitelistForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const submitBtn = e.target.querySelector('button');
-            const resultMsg = document.getElementById('result-msg');
-            
-            const data = {
-                mc_nick: document.getElementById('mc_nick').value,
-                discord_nick: document.getElementById('discord_nick').value,
-                age: document.getElementById('age').value,
-                about: document.getElementById('about').value
-            };
-
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'Отправка...';
-            resultMsg.style.color = '#dbdee1';
-            resultMsg.innerText = 'Отправляем заявку в Discord...';
-
-            try {
-                const response = await fetch('/api/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                const result = await response.json();
-
-                if (response.ok && result.status === 'success') {
-                    resultMsg.style.color = '#23a55a';
-                    resultMsg.innerText = '✅ Заявка успешно отправлена! Ожидайте рассмотрения в Discord.';
-                    document.getElementById('whitelistForm').reset();
-                } else {
-                    resultMsg.style.color = '#ed4245';
-                    resultMsg.innerText = '❌ Ошибка: ' + (result.message || 'Не удалось отправить');
-                }
-            } catch (err) {
-                resultMsg.style.color = '#ed4245';
-                resultMsg.innerText = '❌ Ошибка соединения с сервером.';
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'Отправить заявку';
-            }
-        });
     </script>
+
 </body>
 </html>
