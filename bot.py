@@ -17,7 +17,7 @@ CHANNEL_ID = 1570125341798965282
 SERVER_IP = "winterplus.aternos.me"
 SERVER_VERSION = "26.3"
 
-# Хранилище статусов заявок в памяти (id_заявки: "pending" | "approved" | "rejected")
+# Хранилище статусов заявок
 applications_status = {}
 
 
@@ -40,7 +40,7 @@ class AdminActionView(View):
 
         await interaction.message.edit(embed=embed, view=self)
         await interaction.response.send_message(
-            f"Заявка игрока `{self.minecraft_nick}` одобрена! На его сайте уже открылось меню.",
+            f"Заявка игрока `{self.minecraft_nick}` одобрена! На его сайте открылось меню.",
             ephemeral=True
         )
 
@@ -62,7 +62,14 @@ class AdminActionView(View):
         )
 
 
-# --- ВЕБ-СЕРВЕР ДЛЯ СВЯЗИ С САЙТОМ ---
+# --- ВЕБ-СЕРВЕР И ОТДАЧА САЙТА ---
+
+async def handle_root(request):
+    # Автоматически ищет и открывает index.html из папки проекта на Render
+    if os.path.exists("index.html"):
+        return web.FileResponse("index.html")
+    return web.Response(text="Файл index.html не найден в проекте на Render!", status=404)
+
 
 async def handle_submit(request):
     try:
@@ -105,10 +112,6 @@ async def handle_status(request):
 
 async def handle_options(request):
     return web.Response(headers=cors_headers())
-
-
-async def handle_root(request):
-    return web.Response(text="Winterplus Bot API is running!")
 
 
 def cors_headers():
