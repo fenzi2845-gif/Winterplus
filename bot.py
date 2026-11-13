@@ -14,7 +14,7 @@ intents.members = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 CHANNEL_ID = 1570125341798965282
-SERVER_IP = "winterplus.aternos.me"
+SERVER_IP = "WinterPlus.aternos.me"
 SERVER_VERSION = "26.3"
 
 # Хранилище статусов заявок
