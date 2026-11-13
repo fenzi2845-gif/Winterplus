@@ -42,7 +42,6 @@
             margin-bottom: 25px;
             font-size: 1rem;
         }
-        /* Стили формы */
         .form-group {
             margin-bottom: 15px;
             text-align: left;
@@ -98,9 +97,26 @@
         .btn-shop { background: #10b981; }
         .btn-shop:hover { background: #059669; }
 
-        /* Блоки переключения (анкета / меню) */
-        #success-menu {
+        /* Состояния экранов */
+        #pending-section, #success-menu {
             display: none;
+        }
+        
+        /* Анимация часов */
+        .clock-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        .pending-title {
+            color: #facc15;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
         }
         .menu-buttons {
             display: flex;
@@ -124,7 +140,7 @@
 <body>
 
     <div class="container">
-        <!-- ЭТАП 1: Анкета на сайте -->
+        <!-- ЭТАП 1: Форма анкеты -->
         <div id="application-section">
             <h1>Winterplus</h1>
             <p>Заполните заявку, чтобы получить доступ к серверу</p>
@@ -149,23 +165,27 @@
             </form>
         </div>
 
-        <!-- ЭТАП 2: Меню после отправки (или одобрения) -->
+        <!-- ЭТАП 2: Ожидание ответа с часами -->
+        <div id="pending-section">
+            <div class="clock-icon">⏳</div>
+            <div class="pending-title">Заявка на рассмотрении</div>
+            <p>Мы проверяем вашу анкету. Пожалуйста, подождите ответа администрации. Страница автоматически обновится, как только заявка будет принята.</p>
+            <!-- Кнопка для теста (потом уберем, когда подключим авто-опрос бота) -->
+            <button class="btn" onclick="simulateAdminApproval()" style="background: #475569; font-size: 0.85rem; padding: 8px;">[Тест: симулировать одобрение админом]</button>
+        </div>
+
+        <!-- ЭТАП 3: Меню после одобрения -->
         <div id="success-menu">
-            <div class="success-title">🎉 Анкета успешно отправлена!</div>
-            <p>Ваши данные переданы администрации. Выберите нужный раздел:</p>
+            <div class="success-title">🎉 Поздравляем! Заявка одобрена</div>
+            <p>Добро пожаловать на сервер Winterplus! Выберите нужный раздел:</p>
 
             <div class="menu-buttons">
-                <!-- Кнопка 1: Дискорд -->
                 <a href="https://discord.gg/ваш_инвайт" target="_blank" class="btn btn-discord">
                     💬 Наш Дискорд
                 </a>
-
-                <!-- Кнопка 2: IP и Версия (копирует IP при клике) -->
                 <button class="btn" onclick="copyServerIP()">
                     📌 IP и Версия сервера
                 </button>
-
-                <!-- Кнопка 3: Магазин -->
                 <a href="https://winterplus.easydonate.ru" target="_blank" class="btn btn-shop">
                     🌐 Магазин / Донат
                 </a>
@@ -177,12 +197,19 @@
 
     <script>
         function submitForm(event) {
-            event.preventDefault(); // Останавливаем перезагрузку страницы
+            event.preventDefault();
             
-            // Здесь можно подключить отправку данных в вашего бота (например, через Webhook в Discord)
-            // Сейчас просто скрываем форму и показываем меню с кнопками
-            
+            // Скрываем форму и показываем экран ожидания с часами
             document.getElementById("application-section").style.display = "none";
+            document.getElementById("pending-section").style.display = "block";
+            
+            // Здесь в будущем скрипт будет отправлять данные на сервер бэкенда/бота
+        }
+
+        // Функция-симулятор (для проверки интерфейса прямо сейчас): 
+        // когда администратор в боте нажмет «Принять», этот статус переключит экран на меню
+        function simulateAdminApproval() {
+            document.getElementById("pending-section").style.display = "none";
             document.getElementById("success-menu").style.display = "block";
         }
 
